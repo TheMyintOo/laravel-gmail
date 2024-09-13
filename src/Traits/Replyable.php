@@ -402,14 +402,21 @@ trait Replyable
 	{
 		$body = new Google_Service_Gmail_Message();
 
-		$this->symfonyEmail
+		$this
+			->symfonyEmail
 			->from($this->fromAddress())
 			->to($this->toAddress())
-			->cc($this->returnCopies($this->cc))
-			->bcc($this->returnCopies($this->bcc))
 			->subject($this->subject)
 			->html($this->message)
 			->priority($this->priority);
+
+		if ($this->cc) {
+			$this->symfonyEmail->cc($this->returnCopies($this->cc));
+		}
+
+		if ($this->cc) {
+			$this->symfonyEmail->bcc($this->returnCopies($this->bcc));
+		}
 
 		foreach ($this->attachments as $file) {
 			$this->symfonyEmail->attachFromPath($file);
